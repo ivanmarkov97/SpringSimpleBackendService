@@ -1,5 +1,7 @@
 package ru.ivanmarkov.backend_service.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,6 +27,18 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Task(){
+
+    }
+
+    public Task(String name, String description, Date created_at, Date deadline, User user) {
+        this.name = name;
+        this.description = description;
+        this.created_at = created_at;
+        this.deadline = deadline;
+        this.user = user;
+    }
 
     public int getId() {
         return id;

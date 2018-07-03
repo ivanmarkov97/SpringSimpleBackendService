@@ -3,8 +3,10 @@ package ru.ivanmarkov.backend_service.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ivanmarkov.backend_service.entity.Task;
+import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.repository.TaskRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -25,5 +27,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task findById(int id) {
         return taskRepository.getOne(id);
+    }
+
+    @Override
+    @Transactional
+    public void create(Task task) {
+        taskRepository.save(task);
+    }
+
+    @Override
+    public User getUser(int task_id) {
+        return taskRepository.getOne(task_id).getUser();
     }
 }
