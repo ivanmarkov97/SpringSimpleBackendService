@@ -26,7 +26,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(int id) {
         try {
-            return userRepository.findById(id).get();
+            if (userRepository.findById(id).isPresent()) {
+                return userRepository.findById(id).get();
+            } else {
+                return null;
+            }
         } catch (NoSuchElementException e){
             return null;
         }
@@ -39,10 +43,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        User update_user = userRepository.findById(user.getId()).get();
-        update_user.setName(user.getName());
-        update_user.setEmail(user.getEmail());
-        return userRepository.save(update_user);
+        try {
+            if (userRepository.findById(user.getId()).isPresent()) {
+                User update_user = userRepository.findById(user.getId()).get();
+                update_user.setName(user.getName());
+                update_user.setEmail(user.getEmail());
+                return userRepository.save(update_user);
+            } else {
+                return null;
+            }
+        } catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     @Override
@@ -50,9 +62,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(id);
         } catch (NoSuchElementException e){
-            return;
+            System.out.println("nothing");
         }
     }
-
-
 }

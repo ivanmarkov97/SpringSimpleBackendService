@@ -1,6 +1,5 @@
 package ru.ivanmarkov.backend_service.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.ivanmarkov.backend_service.entity.Task;
@@ -8,9 +7,6 @@ import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.service.TaskService;
 import ru.ivanmarkov.backend_service.service.UserService;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -40,18 +36,13 @@ public class TaskController {
     @PostMapping("/tasks/create")
     @ResponseBody
     void create_task(@RequestBody Map<String, String> jsonRow){
-        int user_id = 0;
-        User user = null;
-        Task task = null;
-        Date created_at = null;
-        Date deadline = null;
         try {
-            user_id = Integer.parseInt(jsonRow.get("user"));
-            user = userService.findById(user_id);
+            int user_id = Integer.parseInt(jsonRow.get("user"));
+            User user = userService.findById(user_id);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            created_at = formatter.parse(jsonRow.get("created_at"));
-            deadline = formatter.parse(jsonRow.get("deadline"));
-            task = new Task(
+            Date created_at = formatter.parse(jsonRow.get("created_at"));
+            Date deadline = formatter.parse(jsonRow.get("deadline"));
+            Task task = new Task(
                     jsonRow.get("name"),
                     jsonRow.get("description"),
                     created_at,
@@ -62,6 +53,12 @@ public class TaskController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @PutMapping("/tasks")
+    @ResponseBody
+    Task update_task(@RequestBody Task task){
+        return taskService.update(task);
     }
 
 }

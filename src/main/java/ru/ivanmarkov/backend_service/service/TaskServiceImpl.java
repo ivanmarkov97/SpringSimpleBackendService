@@ -28,7 +28,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task findById(int id) {
         try {
-            return taskRepository.findById(id).get();
+            if (taskRepository.findById(id).isPresent()) {
+                return taskRepository.findById(id).get();
+            } else {
+                return null;
+            }
         } catch (NoSuchElementException e){
             return null;
         }
@@ -42,6 +46,36 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public User getUser(int task_id) {
-        return taskRepository.getOne(task_id).getUser();
+        if (taskRepository.findById(task_id).isPresent()) {
+            return taskRepository.findById(task_id).get().getUser();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Task update(Task task) {
+        try{
+            if (taskRepository.findById(task.getId()).isPresent()){
+                Task old_task = taskRepository.findById(task.getId()).get();
+                old_task.setName(task.getName());
+                old_task.setDescription(task.getDescription());
+                old_task.setDeadline(task.getDeadline());
+                return taskRepository.save(old_task);
+            } else {
+                return null;
+            }
+        }catch (NoSuchElementException e){
+            return null;
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        try{
+            taskRepository.deleteById(id);
+        }catch (NoSuchElementException e){
+            System.out.println("nothing");
+        }
     }
 }

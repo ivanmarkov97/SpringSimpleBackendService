@@ -43,7 +43,7 @@ public class UserController {
         userService.create(user);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users")
     @ResponseBody
     User update_user(@RequestBody User user){
         return userService.update(user);
