@@ -1,13 +1,12 @@
 package ru.ivanmarkov.backend_service.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.service.UserService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,5 +28,24 @@ public class UserController {
             System.out.println(user.getName());
         }
         return users;
+    }
+
+    @GetMapping("/users/{id}")
+    @ResponseBody
+    User get_user(@PathVariable("id") int id){
+        System.out.println(id);
+        return userService.findById(id);
+    }
+
+    @PostMapping("/users/create")
+    void create_user(@RequestBody User user){
+        user.setCreate_date(new Date());
+        userService.create(user);
+    }
+
+    @PutMapping("/users/{id}")
+    @ResponseBody
+    User update_user(@RequestBody User user){
+        return userService.update(user);
     }
 }

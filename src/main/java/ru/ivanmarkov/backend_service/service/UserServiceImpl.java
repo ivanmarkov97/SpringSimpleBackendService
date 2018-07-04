@@ -6,6 +6,7 @@ import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.repository.UserRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,6 +25,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(int id) {
-        return userRepository.getOne(id);
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException e){
+            return null;
+        }
     }
+
+    @Override
+    public void create(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public User update(User user) {
+        User update_user = userRepository.findById(user.getId()).get();
+        update_user.setName(user.getName());
+        update_user.setEmail(user.getEmail());
+        return userRepository.save(update_user);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (NoSuchElementException e){
+            return;
+        }
+    }
+
+
 }

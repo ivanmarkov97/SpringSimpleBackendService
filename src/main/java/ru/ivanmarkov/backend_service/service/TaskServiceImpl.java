@@ -8,6 +8,7 @@ import ru.ivanmarkov.backend_service.repository.TaskRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -26,7 +27,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task findById(int id) {
-        return taskRepository.getOne(id);
+        try {
+            return taskRepository.findById(id).get();
+        } catch (NoSuchElementException e){
+            return null;
+        }
     }
 
     @Override
