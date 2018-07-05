@@ -16,7 +16,8 @@ public class Project {
     @Column(name="create_date")
     private Date create_date;
 
-    @Column(name="user_id")
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 
     public Project(){
