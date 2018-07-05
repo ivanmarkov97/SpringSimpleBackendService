@@ -23,19 +23,19 @@ public class Task {
     private Date deadline;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     public Task(){
 
     }
 
-    public Task(String name, String description, Date created_at, Date deadline, User user) {
+    public Task(String name, String description, Date created_at, Date deadline, Project project) {
         this.name = name;
         this.description = description;
         this.created_at = created_at;
         this.deadline = deadline;
-        this.user = user;
+        this.project = project;
     }
 
     public int getId() {
@@ -78,11 +78,11 @@ public class Task {
         this.deadline = deadline;
     }
 
-    public User getUser() {
-        return user;
+    public Project getProject() {
+        return project;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

@@ -2,6 +2,7 @@ package ru.ivanmarkov.backend_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.ivanmarkov.backend_service.entity.Project;
 import ru.ivanmarkov.backend_service.entity.Task;
 import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.repository.TaskRepository;
@@ -45,15 +46,16 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public User getUser(int task_id) {
+    public Project getProject(int task_id) {
         if (taskRepository.findById(task_id).isPresent()) {
-            return taskRepository.findById(task_id).get().getUser();
+            return taskRepository.findById(task_id).get().getProject();
         } else {
             return null;
         }
     }
 
     @Override
+    @Transactional
     public Task update(Task task) {
         try{
             if (taskRepository.findById(task.getId()).isPresent()){

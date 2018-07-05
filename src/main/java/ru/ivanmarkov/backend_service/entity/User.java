@@ -13,6 +13,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column(name="password")
+    private String password;
+
     @Column(name = "email")
     private String email;
 
@@ -33,6 +36,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -56,6 +67,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", create_date=" + create_date +
                 '}';

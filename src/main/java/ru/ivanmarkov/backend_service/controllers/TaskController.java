@@ -2,10 +2,11 @@ package ru.ivanmarkov.backend_service.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.ivanmarkov.backend_service.entity.Project;
 import ru.ivanmarkov.backend_service.entity.Task;
 import ru.ivanmarkov.backend_service.entity.User;
+import ru.ivanmarkov.backend_service.service.ProjectService;
 import ru.ivanmarkov.backend_service.service.TaskService;
-import ru.ivanmarkov.backend_service.service.UserService;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,12 +15,12 @@ import java.util.*;
 public class TaskController {
 
     private TaskService taskService;
-    private UserService userService;
+    private ProjectService projectService;
 
     @Autowired
-    public TaskController(TaskService taskService, UserService userService) {
+    public TaskController(TaskService taskService, ProjectService projectService) {
         this.taskService = taskService;
-        this.userService = userService;
+        this.projectService = projectService;
     }
 
     @GetMapping("/tasks")
@@ -37,8 +38,8 @@ public class TaskController {
     @ResponseBody
     void create_task(@RequestBody Map<String, String> jsonRow){
         try {
-            int user_id = Integer.parseInt(jsonRow.get("user"));
-            User user = userService.findById(user_id);
+            int project_id = Integer.parseInt(jsonRow.get("project"));
+            Project project = projectService.findById(project_id);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date created_at = formatter.parse(jsonRow.get("created_at"));
             Date deadline = formatter.parse(jsonRow.get("deadline"));
@@ -47,7 +48,7 @@ public class TaskController {
                     jsonRow.get("description"),
                     created_at,
                     deadline,
-                    user
+                    project
             );
             taskService.create(task);
         } catch (Exception e) {
