@@ -1,7 +1,16 @@
 package ru.ivanmarkov.backend_service.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -13,14 +22,23 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "create_date")
-    private Date create_date;
+    @Column(name="create_date")
+    private Date createDate;
+
+    public User() {}
+
+    public User(String name, String password, String email, Date createDate) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.createDate = createDate;
+    }
 
     public int getId() {
         return id;
@@ -54,12 +72,12 @@ public class User {
         this.email = email;
     }
 
-    public Date getCreate_date() {
-        return create_date;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     @Override
@@ -69,7 +87,7 @@ public class User {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", create_date=" + create_date +
+                ", createDate=" + createDate +
                 '}';
     }
 }
