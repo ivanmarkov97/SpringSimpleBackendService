@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.ivanmarkov.backend_service.auth.AdminAuthFilter;
 import ru.ivanmarkov.backend_service.service.UserService;
 
 @Configuration
@@ -24,9 +26,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AdminAuthFilter adminAuthFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(adminAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/", "/home", "/readme.txt")
                 .permitAll()

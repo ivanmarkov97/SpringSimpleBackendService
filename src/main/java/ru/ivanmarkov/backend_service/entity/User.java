@@ -1,20 +1,16 @@
 package ru.ivanmarkov.backend_service.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.google.common.collect.ImmutableList;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -30,6 +26,12 @@ public class User {
 
     @Column(name="create_date")
     private Date createDate;
+
+    private ImmutableList<Role> authorities;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialNonExpired;
+    private boolean enabled;
 
     public User() {}
 
@@ -56,8 +58,62 @@ public class User {
         this.name = name;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setAuthorities(ImmutableList<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        this.accountNonExpired = accountNonExpired;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public boolean isCredentialNonExpired() {
+        return credentialNonExpired;
+    }
+
+    public void setCredentialNonExpired(boolean credentialNonExpired) {
+        this.credentialNonExpired = credentialNonExpired;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public void setPassword(String password) {
@@ -88,6 +144,11 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", createDate=" + createDate +
+                ", authorities=" + authorities +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialNonExpired=" + credentialNonExpired +
+                ", enabled=" + enabled +
                 '}';
     }
 }

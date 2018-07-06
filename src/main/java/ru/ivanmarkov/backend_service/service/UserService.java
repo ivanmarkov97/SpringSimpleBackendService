@@ -1,9 +1,7 @@
 package ru.ivanmarkov.backend_service.service;
 
 import com.google.common.collect.ImmutableList;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +11,7 @@ import ru.ivanmarkov.backend_service.entity.Role;
 import ru.ivanmarkov.backend_service.entity.User;
 import ru.ivanmarkov.backend_service.repository.UserRepository;
 
-import javax.annotation.PostConstruct;
-import java.util.Collection;
+import java.util.Date;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -42,45 +39,24 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByName(s);
         if (user == null) {
             System.out.println("no such user");
+            user = new User(
+                    "admin",
+                    "password",
+                    "thiendio@yandeex.ru",
+                    new Date()
+            );
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            user.setAuthorities(ImmutableList.of(Role.ADMIN));
+            user.setAccountNonExpired(true);
+            user.setAccountNonLocked(true);
+            user.setCredentialNonExpired(true);
+            user.setEnabled(true);
+            userRepository.save(user);
+            System.out.println(user.toString());
+            return user;
         } else {
-            System.out.println("Username " + user.getName());
-            System.out.println("Username " + user.getPassword());
+            System.out.println(user.toString());
+            return user;
         }
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return ImmutableList.of(Role.USER);
-            }
-
-            @Override
-            public String getPassword() {
-                return user.getPassword();
-            }
-
-            @Override
-            public String getUsername() {
-                return user.getName();
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return true;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
     }
 }
